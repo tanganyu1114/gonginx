@@ -92,6 +92,10 @@ func DumpDirective(d IDirective, style *Style) string {
 func DumpBlock(b IBlock, style *Style) string {
 	var buf bytes.Buffer
 
+	if b == nil {
+		return ""
+	}
+
 	directives := b.GetDirectives()
 	if style.SortDirectives {
 		sort.SliceStable(directives, func(i, j int) bool {
