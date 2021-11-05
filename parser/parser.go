@@ -48,6 +48,9 @@ func NewParserFromLexer(lexer *lexer) *Parser {
 		"http": func(directive *gonginx.Directive) gonginx.IDirective {
 			return parser.wrapHttp(directive)
 		},
+		"stream": func(directive *gonginx.Directive) gonginx.IDirective {
+			return parser.wrapStream(directive)
+		},
 		"server": func(directive *gonginx.Directive) gonginx.IDirective {
 			return parser.wrapServer(directive)
 		},
@@ -212,6 +215,11 @@ func (p *Parser) wrapUpstream(directive *gonginx.Directive) *gonginx.Upstream {
 func (p *Parser) wrapHttp(directive *gonginx.Directive) *gonginx.Http {
 	h, _ := gonginx.NewHttp(directive)
 	return h
+}
+
+func (p *Parser) wrapStream(directive *gonginx.Directive) *gonginx.Stream {
+	s, _ := gonginx.NewStream(directive)
+	return s
 }
 
 func (p *Parser) parseUpstreamServer(directive *gonginx.Directive) *gonginx.UpstreamServer {
