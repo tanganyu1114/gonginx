@@ -8,6 +8,7 @@ import (
 type Http struct {
 	Servers    []*Server
 	Directives []IDirective
+	Comments   []string
 }
 
 //NewHttp create an http block from a directive which has a block
@@ -16,6 +17,7 @@ func NewHttp(directive IDirective) (*Http, error) {
 		http := &Http{
 			Servers:    []*Server{},
 			Directives: []IDirective{},
+			Comments:   directive.GetComment(),
 		}
 		for _, directive := range block.GetDirectives() {
 			if server, ok := directive.(*Server); ok {
@@ -70,4 +72,9 @@ func (h *Http) FindDirectives(directiveName string) []IDirective {
 //GetBlock get block if any
 func (h *Http) GetBlock() IBlock {
 	return h
+}
+
+//GetComment get the comment of directive
+func (h *Http) GetComment() []string {
+	return h.Comments
 }

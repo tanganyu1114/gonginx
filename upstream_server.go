@@ -11,6 +11,7 @@ type UpstreamServer struct {
 	Address    string
 	Flags      []string
 	Parameters map[string]string
+	Comments   []string
 }
 
 //GetName return directive name, Statement  interface
@@ -67,6 +68,7 @@ func NewUpstreamServer(directive IDirective) *UpstreamServer {
 	uss := &UpstreamServer{
 		Flags:      make([]string, 0),
 		Parameters: make(map[string]string, 0),
+		Comments:   directive.GetComment(),
 	}
 
 	for i, parameter := range directive.GetParameters() {
@@ -83,4 +85,9 @@ func NewUpstreamServer(directive IDirective) *UpstreamServer {
 	}
 
 	return uss
+}
+
+//GetComment get the comment of directive
+func (uss *UpstreamServer) GetComment() []string {
+	return uss.Comments
 }

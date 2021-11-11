@@ -74,6 +74,13 @@ func DumpDirective(d IDirective, style *Style) string {
 	if style.SpaceBeforeBlocks && d.GetBlock() != nil {
 		buf.WriteString("\n")
 	}
+
+	if len(d.GetComment()) > 0 {
+		for _, s := range d.GetComment() {
+			buf.WriteString(fmt.Sprintf("%s# %s\n", strings.Repeat(" ", style.StartIndent), s))
+		}
+	}
+
 	buf.WriteString(fmt.Sprintf("%s%s", strings.Repeat(" ", style.StartIndent), d.GetName()))
 	if len(d.GetParameters()) > 0 {
 		buf.WriteString(fmt.Sprintf(" %s", strings.Join(d.GetParameters(), " ")))

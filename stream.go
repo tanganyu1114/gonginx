@@ -8,6 +8,7 @@ import (
 type Stream struct {
 	Servers    []*Server
 	Directives []IDirective
+	Comments   []string
 }
 
 //NewStream create an http block from a directive which has a block
@@ -16,6 +17,7 @@ func NewStream(directive IDirective) (*Stream, error) {
 		stream := &Stream{
 			Servers:    []*Server{},
 			Directives: []IDirective{},
+			Comments:   directive.GetComment(),
 		}
 		for _, directive := range block.GetDirectives() {
 			if server, ok := directive.(*Server); ok {
@@ -70,4 +72,9 @@ func (s *Stream) FindDirectives(directiveName string) []IDirective {
 //GetBlock get block if any
 func (s *Stream) GetBlock() IBlock {
 	return s
+}
+
+//GetComment get the comment of directive
+func (s *Stream) GetComment() []string {
+	return s.Comments
 }

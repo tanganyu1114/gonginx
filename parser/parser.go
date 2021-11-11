@@ -102,13 +102,18 @@ func (p *Parser) parseBlock() *gonginx.Block {
 		Directives: make([]gonginx.IDirective, 0),
 	}
 
+	// add comment cache
+	var commentCache []string
 parsingloop:
 	for {
 		switch {
 		case p.curTokenIs(token.EOF) || p.curTokenIs(token.BlockEnd):
 			break parsingloop
+		case p.curTokenIs(token.Comment):
+			commentCache = append(commentCache, p.currentToken.Literal)
 		case p.curTokenIs(token.Keyword):
-			context.Directives = append(context.Directives, p.parseStatement())
+			context.Directives = append(context.Directives, p.parseStatement(commentCache))
+			commentCache = []string{}
 			break
 		}
 		p.nextToken()
@@ -117,12 +122,15 @@ parsingloop:
 	return context
 }
 
-func (p *Parser) parseStatement() gonginx.IDirective {
+func (p *Parser) parseStatement(cache []string) gonginx.IDirective {
+	// 单个指令，,不在上述的http/server/location内的通过d返回
 	d := &gonginx.Directive{
-		Name: p.currentToken.Literal,
+		Name:    p.currentToken.Literal,
+		Comment: cache,
 	}
 
 	//if we have a special parser for the directive, we use it.
+	// 解析返回http / server / location 等结构体
 	if sp, ok := p.statementParsers[d.Name]; ok {
 		return sp()
 	}
@@ -142,6 +150,7 @@ func (p *Parser) parseStatement() gonginx.IDirective {
 
 	for {
 		if p.curTokenIs(token.Comment) {
+			d.Comment = append(d.Comment, p.currentToken.Literal)
 			p.nextToken()
 		} else {
 			break

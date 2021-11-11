@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"io"
+	"strings"
 
 	"github.com/tufanbarisyildirim/gonginx/parser/token"
 )
@@ -97,8 +98,10 @@ func (s *lexer) readUntil(until runeCheck) string {
 			buf.WriteRune(s.read())
 		}
 	}
-
-	return buf.String()
+	return strings.TrimLeftFunc(buf.String(), func(r rune) bool {
+		return r == '#' || r == ' '
+	})
+	// return buf.String()
 }
 
 //NewToken creates a new Token with its line and column

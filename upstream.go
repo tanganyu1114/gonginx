@@ -10,6 +10,7 @@ type Upstream struct {
 	UpstreamServers []*UpstreamServer
 	//Directives Other directives in upstream (ip_hash; etc)
 	Directives []IDirective
+	Comments   []string
 }
 
 //GetName Statement interface
@@ -43,6 +44,7 @@ func NewUpstream(directive IDirective) (*Upstream, error) {
 	parameters := directive.GetParameters()
 	us := &Upstream{
 		UpstreamName: parameters[0], //first parameter of the directive is the upstream name
+		Comments:     directive.GetComment(),
 	}
 
 	if directive.GetBlock() == nil {
@@ -80,4 +82,9 @@ func (us *Upstream) FindDirectives(directiveName string) []IDirective {
 	}
 
 	return directives
+}
+
+//GetComment get the comment of directive
+func (us *Upstream) GetComment() []string {
+	return us.Comments
 }

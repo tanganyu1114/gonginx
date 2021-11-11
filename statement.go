@@ -11,6 +11,7 @@ type IDirective interface {
 	GetName() string //the directive name.
 	GetParameters() []string
 	GetBlock() IBlock
+	GetComment() []string
 }
 
 //FileDirective a statement that saves its own file

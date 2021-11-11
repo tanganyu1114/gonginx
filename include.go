@@ -5,6 +5,7 @@ type Include struct {
 	*Directive
 	IncludePath string
 	Configs     []*Config
+	Comments    []string
 }
 
 //TODO(tufan): move that part into dumper package
@@ -25,4 +26,9 @@ type Include struct {
 //GetName get directive name
 func (i *Include) GetName() string {
 	return i.Directive.Name
+}
+
+//GetComment get the comment of directive
+func (i *Include) GetComment() []string {
+	return i.Comments
 }

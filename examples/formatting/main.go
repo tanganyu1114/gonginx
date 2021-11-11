@@ -8,12 +8,15 @@ import (
 )
 
 func main() {
-	p := parser.NewStringParser(`user www www;
-worker_processes 5;
+	p := parser.NewStringParser(`####user www www;
+worker_processes 5 ;# 123  #lalalalal
 error_log logs/error.log;
 pid logs/nginx.pid;
 worker_rlimit_nofile 8192;
-events { worker_connections 4096; } http {
+events { worker_connections 4096; } 
+# # #http comment123
+# dadsadlalal111
+http { #11234555
 include mime.types;
 include proxy.conf;
 include fastcgi.conf;
@@ -40,12 +43,15 @@ location ~ ^/(images|javascript|js|css|flash|media|static)/ {
 root /var/www/virtual/big.server.com/htdocs;
 expires 30d;
 } location / { proxy_pass http://127.0.0.1:8080; } }
+##test123
 upstream big_server_com {
 server 127.0.0.3:8000 weight=5;
 server 127.0.0.3:8001 weight=5;
 server 192.168.0.1:8000;
 server 192.168.0.1:8001;
-} server { listen 80;
+} 
+# test 4 5 6
+server { listen 80;
 server_name big.server.com;
 access_log logs/big.server.access.log main;
 location / { proxy_pass http://big_server_com; } } }`)
